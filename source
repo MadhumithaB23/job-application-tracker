@@ -1,0 +1,92 @@
+Index.html	
+
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Application Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Job Application Tracker</h1>
+  <form id="jobForm">
+    <input type="text" id="company" placeholder="Company Name" required />
+    <input type="text" id="position" placeholder="Position" required />
+    <input type="date" id="date" required />
+    <button type="submit">Add Application</button>
+  </form>
+  <ul id="jobList"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+  Style.css	
+
+	body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f4f4f4;
+}
+
+h1 {
+  color: #333;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+input {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+button {
+  padding: 5px 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background: #fff;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-left: 5px solid #007bff;
+}
+
+Script.js
+
+const jobForm = document.getElementById('jobForm');
+const jobList = document.getElementById('jobList');
+
+function loadJobs() {
+  const jobs = JSON.parse(localStorage.getItem('jobs')) || [];
+  jobList.innerHTML = '';
+  jobs.forEach((job, index) => {
+    const li = document.createElement('li');
+    li.textContent = ${job.company} - ${job.position} (Applied on ${job.date});
+    jobList.appendChild(li);
+  });
+}
+
+jobForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const company = document.getElementById('company').value;
+  const position = document.getElementById('position').value;
+  const date = document.getElementById('date').value;
+
+  const newJob = { company, position, date };
+  const jobs = JSON.parse(localStorage.getItem('jobs')) || [];
+  jobs.push(newJob);
+  localStorage.setItem('jobs', JSON.stringify(jobs));
+
+  jobForm.reset();
+  loadJobs();
+});
+
+loadJobs();
